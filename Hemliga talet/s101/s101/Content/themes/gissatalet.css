@@ -1,0 +1,52 @@
+﻿/* File Created: november 29, 2012 */
+
+p
+{
+    margin:0;
+    padding:0;
+}
+
+
+body
+{
+    background: lightblue;
+}
+
+.presentNumbers
+{
+    background: black;
+    width: 30px;
+    border: 1px solid black;
+    float:left;
+}
+
+.black
+{
+    
+    width: 30px;
+    border: 1px solid black;
+    background: black;
+    display: inline;
+	color: White;
+    
+}
+
+.red
+{
+    background: red;
+    width: 30px;
+    /*display: inline;*/
+}
+.blue
+{
+    background: lightblue;
+    width: 30px;
+   /* display: inline;*/
+}
+
+.green
+{
+    background: green;
+    width: 30px;
+   /* display: inline;*/
+}
