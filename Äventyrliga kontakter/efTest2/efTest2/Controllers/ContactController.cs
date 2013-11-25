@@ -67,6 +67,7 @@ namespace efTest2.Controllers
                // return RedirectToAction("Index");  //working
             }
 
+            ViewBag.Message = "Operation failed";
             return View(contact);
             //Gå istället vidare till en vy som talar om att operationen lyckades eller skriv ut det i en sträng.
         }
@@ -77,10 +78,10 @@ namespace efTest2.Controllers
         public ActionResult Edit(int id)
         {
             Contact contact = db.Contacts.Single(c => c.ContactID == id);
-          /*  if (contact == null)
+          if (contact == null)
             {
                 return View("NotFound");
-            }*/
+            }
             return View(contact);
         }
 
@@ -95,8 +96,10 @@ namespace efTest2.Controllers
                 db.Contacts.Attach(contact);
                 db.ObjectStateManager.ChangeObjectState(contact, EntityState.Modified);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return View("Success");
+                //return RedirectToAction("Index");
             }
+            ViewBag.Message = "Operation failed";
             return View(contact);
         }
 
@@ -118,7 +121,8 @@ namespace efTest2.Controllers
             Contact contact = db.Contacts.Single(c => c.ContactID == id);
             db.Contacts.DeleteObject(contact);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return View("Success");
+            //return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
