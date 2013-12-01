@@ -6,131 +6,146 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using efTest2.Models;
-//System.contentModel might be necessary for the data annotations
+
 
 namespace efTest2.Controllers
 { 
     public class ContactController : Controller
     {
-        private ContactEntities db = new ContactEntities();
+        IRepository repository;
 
-        //
-        // GET: /Contact/
+       // private ContactEntities db = new ContactEntities();
+       // Repository repository = new Repository();
+
+        
+        public ContactController()
+            :this(new Repository())
+        {
+        }
+        
+        
+        public ContactController(IRepository repository)
+        {
+            this.repository = repository;
+        }
+         
+
+      
 
         public ViewResult Index()
         {
-            return View(db.Contacts.ToList());
+           // var model = this.repository.GetContacts();
+            List<Contact> contacts = repository.GetContacts();
+            return View(contacts);
+           // return View(db.Contacts.ToList());
         }
 
-        //
-        // GET: /Contact/Details/5
 
         public ViewResult Details(int id)
         {
-            //Ta reda på om resultatet som kommer ut är null. Om ja, gå vidare, om nej, skicka in error page.
-            //Gör eventuellt även en try / catch som fångar upp fel som inte är förväntade som som skickar vidare till en felsida.
-
-
-            //This one is now working
+            
             try
             {
-                Contact contact = db.Contacts.Single(c => c.ContactID == id);
-                // if (contact == null){return view not found} //Borde fungera
+                //Contact contact = db.Contacts.Single(c => c.ContactID == id);
+                Contact contact = repository.ViewContact(id);
                 return View(contact);
             }
             catch (Exception)
             {
-                //ModelState.AddModelError(String.Empty, "Ett fel inträffade");
-                return View("NotFound"); ////Fungerar, gör nu samma sak på de andra actionåtgrärderna.
+                
+                return View("NotFound"); 
             }
         }
 
-        //
-        // GET: /Contact/Create
-
+        
         public ActionResult Create()
         {
             return View();
         } 
 
-        //
-        // POST: /Contact/Create
+        
 
         [HttpPost]
         public ActionResult Create(Contact contact)
         {
             if (ModelState.IsValid)
             {
-                db.Contacts.AddObject(contact);
-                db.SaveChanges();
-                return View("Success"); //Fungerar, gör nu samma sak på de andra actionåtgrärderna.
-               // return RedirectToAction("Index");  //working
+                repository.CreateContact(contact);
+               // db.Contacts.AddObject(contact);
+               // db.SaveChanges();
+                return View("Success"); 
             }
 
             ViewBag.Message = "Operation failed";
             return View(contact);
-            //Gå istället vidare till en vy som talar om att operationen lyckades eller skriv ut det i en sträng.
+          
         }
         
-        //
-        // GET: /Contact/Edit/5
- 
+      
+        
         public ActionResult Edit(int id)
         {
-            Contact contact = db.Contacts.Single(c => c.ContactID == id);
-          if (contact == null)
+            try
+            {
+                Contact contact = repository.ViewContact(id);
+                //repository.EditContact(contact);
+                //Contact contact = db.Contacts.Single(c => c.ContactID == id);
+              
+                return View(contact);
+            }
+            catch (Exception)
             {
                 return View("NotFound");
             }
-            return View(contact);
         }
 
-        //
-        // POST: /Contact/Edit/5
+    
 
         [HttpPost]
         public ActionResult Edit(Contact contact)
         {
             if (ModelState.IsValid)
             {
-                db.Contacts.Attach(contact);
-                db.ObjectStateManager.ChangeObjectState(contact, EntityState.Modified);
-                db.SaveChanges();
+                repository.EditContact(contact);
+               // db.Contacts.Attach(contact);
+               // db.ObjectStateManager.ChangeObjectState(contact, EntityState.Modified);
+               // db.SaveChanges();
                 return View("Success");
-                //return RedirectToAction("Index");
+            
             }
             ViewBag.Message = "Operation failed";
             return View(contact);
         }
 
-        //
-        // GET: /Contact/Delete/5
+        
  
         public ActionResult Delete(int id)
         {
-            Contact contact = db.Contacts.Single(c => c.ContactID == id);
+            //Contact contact = db.Contacts.Single(c => c.ContactID == id);
+            Contact contact = repository.ViewContact(id);
             return View(contact);
         }
 
-        //
-        // POST: /Contact/Delete/5
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {            
-            Contact contact = db.Contacts.Single(c => c.ContactID == id);
-            db.Contacts.DeleteObject(contact);
-            db.SaveChanges();
+            //Contact contact = db.Contacts.Single(c => c.ContactID == id);
+            //db.Contacts.DeleteObject(contact);
+            //db.SaveChanges();
+            Contact contact = repository.ViewContact(id);
+            repository.DeleteContact(contact);
             return View("Success");
-            //return RedirectToAction("Index");
+            
         }
 
+        /*
         protected override void Dispose(bool disposing)
         {
             db.Dispose();
             base.Dispose(disposing);
         }
+         * */
 
-        //Check if pages are valid, and if not, send person to error page.
     }
 }
