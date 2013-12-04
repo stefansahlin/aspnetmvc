@@ -12,6 +12,7 @@ namespace efTest2.Models
     public class Repository : IRepository //: efTest2.Models.IRepository
     {
         private ContactEntities db = new ContactEntities();
+        //private bool _disposed = true;
 
         public Contact ViewContact(int id)
         {
@@ -24,6 +25,17 @@ namespace efTest2.Models
             List<Contact> contacts = db.Contacts.ToList();
             return contacts;
         }
+
+        /*
+        public List<Contact> GetLastContacts()
+        {
+            List<Contact> contacts = db.Contacts
+         *      .OrderByDescending(contact => contact.ContactID)
+                .Take(20)                
+                .ToList();
+            return contacts;
+        }
+         * */
 
         public void CreateContact(Contact contact)
         {
@@ -51,5 +63,6 @@ namespace efTest2.Models
             base.Dispose(disposing);
         }
          * */
+         
     }
 }
