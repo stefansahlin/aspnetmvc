@@ -7,12 +7,14 @@ using System.Web;
 using System.Web.Mvc;
 using efTest2.Models;
 namespace efTest2.Models
+
     //föreläsning 121119 för repository
 {
     public class Repository : IRepository //: efTest2.Models.IRepository
     {
         private ContactEntities db = new ContactEntities();
-        //private bool _disposed = true;
+        
+        private bool _disposed = false;
 
         public Contact ViewContact(int id)
         {
@@ -52,17 +54,31 @@ namespace efTest2.Models
         public void EditContact(Contact contact)
         {
             db.Contacts.Attach(contact);
-            db.ObjectStateManager.ChangeObjectState(contact, EntityState.Modified); //Seems to work without this code
+            db.ObjectStateManager.ChangeObjectState(contact, EntityState.Modified); 
             db.SaveChanges();
         }
 
-        /*
+
+
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
-            base.Dispose(disposing);
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            _disposed = true;
+
         }
-         * */
+
+
+        public void Dispose()
+        {
+            Dispose(true /* disposing */);
+            GC.SuppressFinalize(this);
+        }
          
     }
 }

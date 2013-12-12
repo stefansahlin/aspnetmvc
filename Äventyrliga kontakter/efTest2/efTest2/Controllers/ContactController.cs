@@ -73,6 +73,8 @@ namespace efTest2.Controllers
                 repository.CreateContact(contact);
                // db.Contacts.AddObject(contact);
                // db.SaveChanges();
+                //post, redirect, get!!!
+                //return direct(actionmetoden success, där det står return view)
                 return View("Success"); 
             }
 
@@ -139,13 +141,12 @@ namespace efTest2.Controllers
             
         }
 
-        /*
+
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            repository.Dispose();
             base.Dispose(disposing);
         }
-        */ 
 
     }
 }

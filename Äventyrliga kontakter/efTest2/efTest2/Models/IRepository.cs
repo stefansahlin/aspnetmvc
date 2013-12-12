@@ -1,7 +1,7 @@
 ﻿using System;
 namespace efTest2.Models
 {
-   public interface IRepository //: IDisposable
+   public interface IRepository : IDisposable
     {
         void CreateContact(Contact contact);
         void DeleteContact(Contact contact);
@@ -10,4 +10,6 @@ namespace efTest2.Models
         //System.Collections.Generic.List<Contact> GetLastContacts();
         Contact ViewContact(int id);
     }
+
+    //next birthday 3 crud, i kursmaterialrep
 }
