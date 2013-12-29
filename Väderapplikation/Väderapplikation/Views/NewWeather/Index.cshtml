@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Väderapplikation.Models.NewWeather>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.place)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.longitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.latitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day1day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day1temp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day2day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day2temp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day3day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day3temp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day4day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day4temp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day5day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.day5temp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NewUser.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.place)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.longitude)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.latitude)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day1day)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day1temp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day2day)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day2temp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day3day)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day3temp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day4day)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day4temp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day5day)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.day5temp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NewUser.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,139 @@
+﻿@model Väderapplikation.Models.MyWeather
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@{var weeklength = 5;}
+
+<input id="mytextbox" name="textbox" type="text" value="@ViewBag.latitude.ToString()" />
+<input id="mytextbox2" name="textbox" type="text" value="@ViewBag.longitude.ToString()" />
+
+
+
+
+
+<h2>Vädret för din valda plats</h2>
+
+<div id="weathertablediv">
+    <table border="1">
+        <tr>
+            <th>@Model.day1day.ToString() </th>
+            <th>@Model.day2day.ToString() </th>
+            <th>@Model.day3day.ToString() </th>
+            <th>@Model.day4day.ToString() </th>
+            <th>@Model.day5day.ToString() </th>
+        </tr>
+        <tr>
+            <td>@ViewBag.day1temp.ToString()</td>
+            <td>@ViewBag.day2temp.ToString()</td>
+            <td>@ViewBag.day3temp.ToString()</td>
+            <td>@ViewBag.day4temp.ToString()</td>
+            <td>@ViewBag.day5temp.ToString()</td>
+        </tr>
+        <tr>
+            <td>@ViewBag.day1Weather.ToString()</td>
+            <td>@ViewBag.day2Weather.ToString()</td>
+            <td>@ViewBag.day3Weather.ToString()</td>
+            <td>@ViewBag.day4Weather.ToString()</td>
+            <td>@ViewBag.day5Weather.ToString()</td>
+        </tr>
+        <tr>
+            <td><img src="../../../Content/themes/base/images/@(ViewBag.day1Weather.ToString()).png" alt="okänt väder" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(ViewBag.day2Weather.ToString()).png" alt="okänt väder" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(ViewBag.day3Weather.ToString()).png" alt="okänt väder" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(ViewBag.day4Weather.ToString()).png" alt="okänt väder" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(ViewBag.day5Weather.ToString()).png" alt="okänt väder" height="42" width="42"> </td>
+        </tr>
+    </table>
+</div>
+
+<div id="mapdiv" style="width:400px;height:400px;">
+    <p>Kartan visas över platsen som användaren har valt</p>
+</div>
+
+    <fieldset>
+        <legend>MyWeather</legend>
+
+        <div class="display-label">
+            @Html.DisplayNameFor(model => model.place)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.place)
+        </div>
+
+        <div class="display-label">
+            <h1> @Html.DisplayNameFor(model => model.projectuser)</h1>
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.projectuser)
+        </div>
+
+
+
+    </fieldset>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Skapa ny?", "GetWeather")
+        <!-- @Html.ActionLink("Skapa ny?", "Create")-->
+    </p>
+
+<script>
+
+    //Sätt igång en loop som placerar in sökningen i localstorage, värdet ska vara platsen som sökts och nyckeln ska vara användarens username plus siffran.
+    //Förhoppningsvis går det att använda en array till det här.
+
+
+    function initialize() {
+
+        var textbox = document.getElementById("mytextbox");
+        var myvalue = textbox.value;
+        var mynewvalue = myvalue.replace(/,/g, '.')
+
+        var textbox2 = document.getElementById("mytextbox2");
+        var myvalue2 = textbox2.value;
+        var mynewvalue2 = myvalue2.replace(/,/g, '.');
+        //var myCenter=new google.maps.LatLng(51.508742,-0.120850); //Hur anropet till google maps ser ut. Ersätt här med latitude och longitude.
+        //Man bör här ha tillgång till platsens namn redan i vyn, så att den kan skickas som parameter genom ajaxanropet.
+        //Ajaxanropet, se till att ha jQuery installerat för att det ska kunna fungera.
+        //Anropet bör hämta från en c#-kod som i sin tur hämtar från databasen.
+        //In till initialize-metoden bör coordinaterna redan komma från xml-diagrammet.
+        //Följ den här instruktionen: http://weblogs.asp.net/gunnarpeipman/archive/2010/07/26/how-to-make-ajax-requests-to-asp-net-mvc-application-using-jquery.aspx
+        //var url = '/contacts/ListPartiesByNameStart?nameStart=A';
+        //$.ajax({ url: url, success: DataRetrieved, type: 'POST', dataType: 'json' });
+        //Du bör ta emot informationen i json
+        /*
+         $.ajax({  type: "GET",
+             url: "http://localhost:49410/Home/AjaxGetObjectInfo?placeName=place",
+             })
+             .done(function( msg )
+             {
+                 //msg som returneras in, ska innehålla koordinaterna.
+             }
+
+          */
+
+        var myCenter = new google.maps.LatLng(mynewvalue, mynewvalue2);
+
+        var mapProp = {
+            center: myCenter,
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById("mapdiv"), mapProp);
+
+        var marker = new google.maps.Marker({
+            position: myCenter,
+        });
+
+        marker.setMap(map);
+    }
+    //Local storage går igång redan vid första postningen och fylls sedan på vid varje nu hämtning.
+    //Skriptet går så länge man befinner sig på sidan. Varje gång användaren trycker på sök-knappen så hamnar sökningen i local storage.
+    //Värdet är innehållet i sökrutan, nyckeln är ett nummer. Se om attributet length finns som gör att man kan hämta längden på local storage innan man sätter värdet.
+    //Vid varje laddning av sidan hämtar scriptet ut allt innehåll som man har lagt i local storage och lägger det i en länklista bredvid kartan.
+    //Det ska även finnas en clearknapp som rensar local storage.
+
+</script>
