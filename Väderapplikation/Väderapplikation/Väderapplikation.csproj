@@ -184,15 +184,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MyWeatherController.cs" />
-    <Compile Include="Controllers\NewWeatherController.cs" />
+    <Compile Include="Controllers\MyPlacesController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ExtWeather.cs" />
+    <Compile Include="Models\IRepository.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -223,6 +224,55 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model2.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Model3.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model3.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model3.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model3.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model3.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model3.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model4.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model4.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model4.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model4.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model4.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model5.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model5.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model5.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model5.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MyPlace.cs">
+      <DependentUpon>Model5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MyPlacesRepository.cs" />
     <Compile Include="Models\MyWeather.cs">
       <DependentUpon>Model2.tt</DependentUpon>
     </Compile>
@@ -234,7 +284,18 @@
     </Compile>
     <Compile Include="Models\PlaceService.cs" />
     <Compile Include="Models\PlaceService2.cs" />
+    <Compile Include="Models\PlacesExt.cs">
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PlacesRepository.cs" />
     <Compile Include="Models\ProjectRepository.cs" />
+    <Compile Include="Models\spGetAllPlacesExtUsername_Result.cs">
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spGetSpecificPlace_Result.cs">
+      <DependentUpon>Model4.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\userMessages.cs" />
     <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Models\WeatherRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -330,6 +391,57 @@
       <DependentUpon>Model2.edmx</DependentUpon>
       <LastGenOutput>Model2.cs</LastGenOutput>
     </Content>
+    <EntityDeploy Include="Models\Model3.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model3.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model3.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model3.edmx</DependentUpon>
+      <LastGenOutput>Model3.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model3.edmx.diagram">
+      <DependentUpon>Model3.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\Model3.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model3.edmx</DependentUpon>
+      <LastGenOutput>Model3.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="Models\Model4.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model4.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model4.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model4.edmx</DependentUpon>
+      <LastGenOutput>Model4.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model4.edmx.diagram">
+      <DependentUpon>Model4.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\Model4.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model4.edmx</DependentUpon>
+      <LastGenOutput>Model4.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="Models\Model5.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model5.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model5.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model5.edmx</DependentUpon>
+      <LastGenOutput>Model5.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model5.edmx.diagram">
+      <DependentUpon>Model5.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\Model5.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model5.edmx</DependentUpon>
+      <LastGenOutput>Model5.cs</LastGenOutput>
+    </Content>
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -384,21 +496,19 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\NewWeather\Index.cshtml" />
-    <Content Include="Views\NewWeather\Details.cshtml" />
-    <Content Include="Views\NewWeather\Create.cshtml" />
-    <Content Include="Views\NewWeather\Edit.cshtml" />
-    <Content Include="Views\NewWeather\Delete.cshtml" />
     <Content Include="Views\Home\GetNewWeatherMap.cshtml" />
     <Content Include="Views\Home\GetMap.cshtml" />
     <Content Include="Views\Home\MapForm.cshtml" />
     <Content Include="Views\Home\PlaceInput.cshtml" />
-    <Content Include="Views\MyWeather\Index.cshtml" />
-    <Content Include="Views\MyWeather\Details.cshtml" />
-    <Content Include="Views\MyWeather\Create.cshtml" />
-    <Content Include="Views\MyWeather\Edit.cshtml" />
-    <Content Include="Views\MyWeather\Delete.cshtml" />
-    <Content Include="Views\MyWeather\GetWeather.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\MyPlaces\Index.cshtml" />
+    <Content Include="Views\MyPlaces\Details.cshtml" />
+    <Content Include="Views\MyPlaces\Create.cshtml" />
+    <Content Include="Views\MyPlaces\Edit.cshtml" />
+    <Content Include="Views\MyPlaces\Delete.cshtml" />
+    <Content Include="Views\MyPlaces\NewDetails.cshtml" />
+    <Content Include="Views\MyPlaces\NewCreateConfirm.cshtml" />
+    <Content Include="Views\MyPlaces\NewCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

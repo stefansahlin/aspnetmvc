@@ -12,6 +12,22 @@ body {
     color: #696969;
 }
 
+#loginLink{
+    text-align: right;
+    padding: 0px;
+    margin: 0px;
+}
+.right{
+    text-align: right;
+    padding-right: 10px;
+    padding-top: 2px;
+    margin: 0px;
+}
+
+legend {
+    visibility : hidden;
+}
+
 a:link {
     color: #034af3;
     text-decoration: underline;
@@ -80,6 +96,12 @@ page width. Or, you can specify an exact pixel width. */
     width: 90%;
     margin-left: auto;
     margin-right: auto;
+    border: 1px solid black;
+}
+
+.content-main{
+    float: left;
+    border: 1px solid black;
 }
 
 header, #header {
@@ -106,6 +128,7 @@ header h1, #header h1 {
     border-radius: 4px 0 0 0;
     -webkit-border-radius: 4px 0 0 0;
     -moz-border-radius: 4px 0 0 0;
+    border: 1px solid black;
 }
 
 #mapdiv{
@@ -129,6 +152,7 @@ footer,
     border-radius: 0 0 4px 4px;
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
+    clear:both;
 }
 
 /* TAB MENU   
@@ -343,4 +367,9 @@ div#title {
 .right{
     //border: 1px solid black;
     float: right;
+}
+
+
+.red{
+    color: red;
 }

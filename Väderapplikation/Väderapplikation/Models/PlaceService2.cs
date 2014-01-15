@@ -10,45 +10,72 @@ using System.Xml.Linq;
 namespace Väderapplikation.Models
 {
     public class PlaceService2
-    {
-
-        public string GetRegion(string place)
+    {       
+        public bool CheckExistanceYr(string place, string region)
         {
-            string requestUristring = String.Format(@"http://api.geonames.org/search?name_startsWith={0}&country=se&maxRows=10&username=elsteffo&style=full", place);
+            bool exists = false;
+            string requestUristring = String.Format(@"http://www.yr.no/place/Sweden/{0}/{1}/forecast.xml", region, place);
+            try
+            {
+                var request = WebRequest.Create(requestUristring);
+                using (var response = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(response.GetResponseStream()))
+                    {
+                        var document = XDocument.Load(stream);
+                        var list = document.Descendants("forecast")                           
+                            .ToList();
+                        if (list.Count > 0)
+                        {
+                            exists = true;
+                            return exists;
+                        }
+
+                        else
+                        {
+                            exists = false;
+                            return exists;
+                        }
+                    }
+                }               
+            }
+            catch
+            {
+                return exists;
+            }
+        }
+    
+        public List<string> GetRegions(string place)
+        {          
+            var regions = new List<string>();
+            string requestUristring = String.Format(@"http://api.geonames.org/search?name_equals={0}&country=se&maxRows=10&username=elsteffo&style=full", place);
             var request = WebRequest.Create(requestUristring);
-            //string region = "somewhere";
             using (var response = request.GetResponse())
             {
                 using (StreamReader stream = new StreamReader(response.GetResponseStream()))
                 {
                     var document = XDocument.Load(stream);
-                    var list = document.Descendants("adminName1")
-                        .Take(1)
+                    var placelist = document.Descendants("geoname")
+                        .Distinct()
                         .ToList();
-                    string region = list[0].Value;
-                    return region;
+                    foreach (XElement element in placelist)
+                    {
+                        var regionlist = element.Descendants("adminName1").ToList();
+                        var regionvalue = regionlist[0].Value;
+                        if (!regions.Contains(regionvalue))
+                            regions.Add(regionvalue);                        
+                    }                   
+                    return regions;
                 }
-
-
-                //return null;
             }
         }
 
-        // public List<double> GetWeatherinfo(string place)
-        //public NewWeather GetWeatherinfo(string place)
+
         public ExtWeather GetWeatherInfo(string place, string region)
         {
-            //Change this one to a dynamic string
-            //  string requestUristring = String.Format(@"http://www.yr.no/place/Sweden/stockholm/norrtelje/forecast.xml");
-            //string requestUristring = String.Format(@"http://www.yr.no/place/Sweden/stockholm/{0}/forecast.xml", place); //right one
             string requestUristring = String.Format(@"http://www.yr.no/place/Sweden/{0}/{1}/forecast.xml", region, place);
-            // string requestUristring = String.Format(@"http://api.geonames.org/search?name_startsWith={0}&country=GB&maxRows=10&username=elsteffo", place);
+            //string requestUristring = String.Format(@"http://www.yr.no/place/Sweden/{0}/{1}/forecast.xml", "fakePlace", "fakeRegion");
             var request = WebRequest.Create(requestUristring);
-            var coordinates = GetCoordinates(place);
-            decimal longitude = decimal.Parse(coordinates[0], System.Globalization.CultureInfo.InvariantCulture);
-            decimal latitude = decimal.Parse(coordinates[1], System.Globalization.CultureInfo.InvariantCulture);
-
-            //List<string> information = new List<string>();
             List<double> informationdouble = new List<double>();
             List<DateTime> informationdate = new List<DateTime>();
             List<string> informationweather = new List<string>();
@@ -62,21 +89,19 @@ namespace Väderapplikation.Models
                         .Take(1)
                         .ToList();
 
-                    var timelist = list.Descendants("time")
-                        //.Take(5) //where last attribute(period) = 0
+                    var timelist = list.Descendants("time")                        
                             .ToList();
                     string tmpDate = "0000-00-00";
                     foreach (XElement element in timelist)
                     {
-                        if (element.Attribute("period").Value == "2" || element.Attribute("period").Value == "3")//ska ersättas med 2
+                        if (element.Attribute("period").Value == "2" || element.Attribute("period").Value == "3")
                         {
                             if (element.Attribute("from").Value.Substring(0, 10) != tmpDate)
                             {
                                 var date = element.Attribute("from").Value;
                                 DateTime myDate = DateTime.Parse(date, System.Globalization.CultureInfo.InvariantCulture);
+                              
                                 informationdate.Add(myDate);
-                                //använd substring för date istället för datetime.
-
                                 var templist = element.Descendants("temperature").ToList();
                                 var weatherlist = element.Descendants("symbol").ToList();
                                 var weathervalue = weatherlist[0].Attribute("name").Value;
@@ -94,9 +119,7 @@ namespace Väderapplikation.Models
                                 else
                                 {
                                     ExtWeather newWeather = new ExtWeather
-                                    {
-                                        // Day1day = ...
-
+                                    {                                  
                                         Day1day = informationdate[0],
                                         Day2day = informationdate[1],
                                         Day3day = informationdate[2],
@@ -111,42 +134,25 @@ namespace Väderapplikation.Models
                                         Day2temp = (decimal)informationdouble[1],
                                         Day3temp = (decimal)informationdouble[2],
                                         Day4temp = (decimal)informationdouble[3],
-                                        Day5temp = (decimal)informationdouble[4],
-
-                                        latitude = latitude,
-                                        longitude = longitude
-                                        
+                                        Day5temp = (decimal)informationdouble[4],                                        
                                     };
-                                    //var coordinates = GetCoordinates(place);
-                                    //return informationdouble;
                                     return newWeather;
                                 }
                             }
                             tmpDate = element.Attribute("from").Value.Substring(0, 10);
-
-                        } //--
-
-
+                        } 
                     }
-
-                   
-
-
-
-
-
-                    return null;
-                   
+                    return null;                 
                 }
             }
         }
 
-        public List<string> GetCoordinates(string place)
+       
+
+        public List<string> GetNewCoordinates(string place, string region)
         {
             var placeInfo = place;
-            //string city = "Lon";
-            //string requestUristring = String.Format(@"http://api.geonames.org/search?name_startsWith={0}&country=GB&maxRows=10&username=elsteffo", place);
-            string requestUristring = String.Format(@"http://api.geonames.org/search?name_startsWith={0}&country=se&maxRows=10&username=elsteffo", place); //eventuellt måste du ändra på landskoden också om du vill ha med internationella länder.
+            string requestUristring = String.Format(@"http://api.geonames.org/search?name_equals={0}&country=se&maxRows=10&username=elsteffo&style=full", place); 
             var request = WebRequest.Create(requestUristring);
             using (var response = request.GetResponse())
             {
@@ -154,43 +160,30 @@ namespace Väderapplikation.Models
                 {
                     var document = XDocument.Load(stream);
 
-                    /*
-                    var list = document.Descendants("geoname")
-                        .Take(2)
-                        .ToList();
-                     * * */
                     List<string> coordinates = new List<string>();
 
-                    var list = document.Descendants("geoname")
-                        .Take(1)
+                    var placelist = document.Descendants("geoname")
                         .ToList();
-                    /*
-                    foreach(XElement xel in list){
-                        
-                        testarray.Add(xel.ToString());
-                        var newlist = xel.Descendants("lat").ToList();
+                    int count = 0;
+                    foreach(XElement xel in placelist){                       
+                        var adminNames = xel.Descendants("adminName1")
+                        .ToList();
+                        var testPlace = adminNames[0].Value.ToLower();
+                        if (testPlace == region.ToLower()) 
+                        {
+                            var latitudelist = placelist.Descendants("lat").ToList();
+                            var newLatitude = latitudelist[count];
+                            var longitudelist = placelist.Descendants("lng").ToList();
+                            var newLongitude = longitudelist[count];
+                            coordinates.Add(newLongitude.Value);
+                            coordinates.Add(newLatitude.Value);
+                            return coordinates;
+                        }
+                        count += 1;
                     }
-                    */
-                    var latitude = list.Descendants("lat").ToList();
-                    var longitude = list.Descendants("lng").ToList();
-                    var typetest = longitude[0].Value;
-                    string cityLongitude = longitude[0].Value;
-                    string cityLatitude = latitude[0].Value;
-
-                    //float test1 = float.Parse(cityLatitude);
-                    //  float test2 = float.Parse(cityLongitude);
-
-                    coordinates.Add(cityLongitude);
-                    coordinates.Add(cityLatitude);
-                    return coordinates;
-                    //working now
-
-                    //var testElement = list[0].Value;
-
-                    //This should get the xmlDocument. Next step is to break this out to a separate funktion and to change the string so the variable is by city Name
+                    return null;                    
                 }
             }
-
         }
     }
 }

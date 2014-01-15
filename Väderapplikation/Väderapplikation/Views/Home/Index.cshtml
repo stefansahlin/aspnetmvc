@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Förstasidan";
 
     <!-- Testing Ajax-->
     <!--
@@ -11,16 +11,19 @@
     -->
 }
 <!--<body onload="myFunction()">-->
-<h2>@ViewBag.Message</h2>
-<p>
-    Det är här man ska se alternativen på förstasidan.
-</p>
+
+<h1>
+    Välkommen till väderapplikationen. 
+</h1>
+@if (Request.IsAuthenticated){
+<p>Du är nu inloggad som @Html.ActionLink(User.Identity.Name, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })! Tryck på länken "places" för att komma vidare</p>
+@Html.ActionLink("Places", "Index", "MyPlaces")
+}
+else{
+<p>Du är inte inloggad. Logga in för att komma till tjänsten</p>
+}
 
 
-@Html.ActionLink("go to form", "PlaceInput")
-
-<!-- Testing Ajax-->
-@Html.ActionLink("go to ajaxTest", "TestingAjax")
 
 
 <div id="result">
