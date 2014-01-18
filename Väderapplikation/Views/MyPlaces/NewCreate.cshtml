@@ -1,0 +1,47 @@
+﻿@model Väderapplikation.Models.ViewModel
+
+@{
+    ViewBag.Title = "NewCreate";
+}
+<p>@ViewBag.UserMessage</p>
+<h2>NewCreate</h2>
+
+
+@using (Html.BeginForm("NewCreateConfirm", "MyPlaces"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>ViewModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.place)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.place)
+            @Html.ValidationMessageFor(model => model.place)
+        </div>
+        <p>
+            <input type="submit" onclick="getInfo()" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script>
+    //Fungerar så här långt. Nästa steg är att hitta ett sätt att skriva ut varje värde i local storage.
+    function getInfo() {
+        var storagelength = localStorage.length;
+        var textbox = document.getElementById("place");
+        localStorage.setItem(storagelength, textbox.value);
+    }
+</script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

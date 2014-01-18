@@ -1,0 +1,85 @@
+﻿@model Väderapplikation.Models.ExtWeather
+
+@{
+    ViewBag.Title = "Details";
+}
+<p>@ViewBag.UserMessage</p>
+@{var weeklength = 5;}
+
+<input id="mytextbox" type="hidden" name="textbox" value="@ViewBag.latitude.ToString()" />
+<input id="mytextbox2" type="hidden" name="textbox" value="@ViewBag.longitude.ToString()" />
+
+<h2>Vädret för @Model.placeName.ToString() denna vecka</h2>
+
+
+<!--Ersätt om möjligt detta med en loop-->
+<div id="weathertablediv">
+    <table border="1">
+        <tr>
+           
+            <th>Idag</th> <!--Ta bort det innanför paranteserna om du vill se exakta tider-->
+            <th>Imorgon</th>
+            <th>@Model.Day3day.ToString("dddd", new System.Globalization.CultureInfo("sv-SE"))</th>
+            <th>@Model.Day4day.ToString("dddd", new System.Globalization.CultureInfo("sv-SE"))</th>
+            <th>@Model.Day5day.ToString("dddd", new System.Globalization.CultureInfo("sv-SE"))</th>
+        </tr>
+        <tr>
+            <td>@Model.Day1temp.ToString()</td>
+            <td>@Model.Day2temp.ToString()</td>
+            <td>@Model.Day3temp.ToString()</td>
+            <td>@Model.Day4temp.ToString()</td>
+            <td>@Model.Day5temp.ToString()</td>
+        </tr>
+     
+        <tr>
+            <td><img src="../../../Content/themes/base/images/@(Model.Day1Weather.ToString()).png" alt="@Model.Day1Weather.ToString()" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(Model.Day2Weather.ToString()).png" alt="@Model.Day2Weather.ToString()" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(Model.Day3Weather.ToString()).png" alt="@Model.Day3Weather.ToString()" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(Model.Day4Weather.ToString()).png" alt="@Model.Day4Weather.ToString()" height="42" width="42"> </td>
+            <td><img src="../../../Content/themes/base/images/@(Model.Day5Weather.ToString()).png" alt="@Model.Day5Weather.ToString()" height="42" width="42"> </td>
+        </tr>
+    </table>
+</div>
+
+<div id="mapdiv" style="width:400px;height:400px;">
+</div>
+
+
+<p>
+    @Html.ActionLink("Tillbaka till listan", "Index") |
+    @Html.ActionLink("Skapa ny?", "NewCreate")
+</p>
+
+<script>
+
+
+
+
+    function initialize() {
+
+        var textbox = document.getElementById("mytextbox");
+        var myvalue = textbox.value;
+        var mynewvalue = myvalue.replace(/,/g, '.');
+        var textbox2 = document.getElementById("mytextbox2");
+        var myvalue2 = textbox2.value;
+        var mynewvalue2 = myvalue2.replace(/,/g, '.');
+        var myCenter = new google.maps.LatLng(mynewvalue, mynewvalue2);
+
+        var mapProp = {
+            center: myCenter,
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById("mapdiv"), mapProp);
+
+        var marker = new google.maps.Marker({
+            position: myCenter,
+        });
+
+        marker.setMap(map);
+    }
+
+
+</script>
+

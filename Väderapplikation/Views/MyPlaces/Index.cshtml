@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Väderapplikation.Models.MyPlace>
+
+@{
+    ViewBag.Title = "Index";
+}
+<p class="red">@ViewBag.UserMessage</p>
+
+
+<h2>Index</h2>
+<p>Sök de platser som du vill se vädret på. Du kan välja hur många platser du vill, men bara en och samma plats en gång. Du kan bara välja svenska platser just nu.</p>
+
+<p>
+    @Html.ActionLink("Skapa ny", "NewCreate")
+
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.place)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.region)
+        </th>
+        <th>
+
+        </th>
+    </tr>
+    
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.place)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.region)
+            </td>
+            <td>
+                @Html.ActionLink("Se plats", "NewDetails", new { id = item.ID }) | <!--Ändring här-->
+                @Html.ActionLink("Ta bort", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div id="resultContainer">
+    <p>Dina senaste sökningar</p>
+    <div id="result"></div>
+</div>
+@if (Request.IsAuthenticated) {
+<script>
+    
+    if (typeof (Storage) !== "undefied") {
+        var storagelength = localStorage.length;
+       // document.getElementById("result").innerHTML =  "Antal sökningar: " + storagelength + " senaste sökning: " + localStorage[storagelength-1] /*"Nyckel: " + localStorage.key*/;
+        for (var i = 0; i < localStorage.length; i++) {
+            // do something with localStorage.getItem(localStorage.key(i));
+            var item = document.createElement('p');
+            item.innerHTML = localStorage.getItem(localStorage.key(i));            
+            document.getElementById("result").appendChild(item);
+        }
+    }
+    else {
+        document.getElementById("result").innerHTML = "local storage funkar inte i den här browsern";
+    }
+    //var link = "<a href='#'>En länk<a>";
+    if (localStorage.length > 0){
+    var newA = document.createElement('a');
+    var newP = document.createElement('p');
+    newA.setAttribute('href', "#");
+    newA.innerHTML = "Radera tidigare sökningar";
+    
+    document.getElementById("result").appendChild(newP);
+    document.getElementById("result").appendChild(newA);
+    newA.onclick = function () {
+        document.getElementById("result").innerHTML = "";
+        localStorage.clear();
+    }
+    }
+</script>
+}
